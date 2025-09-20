@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crm-mongodb
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  source:
+    repoURL: 'git@gitlab.com:yairdamri48-group/demo-crm-chart.git'
+    targetRevision: HEAD
+    path: .
+    helm:
+      values: |
+        app:
+          enabled: false
+        mongodb:
+          enabled: true
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: demo-crm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

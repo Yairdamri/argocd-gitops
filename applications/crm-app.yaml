@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crm-app
+  namespace: argocd
+  annotations:
+    # Ensure app syncs after infrastructure (-2 CRDs, -1 operator, 0 ingress)
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  source:
+    repoURL: 'git@gitlab.com:yairdamri48-group/demo-crm-chart.git'
+    targetRevision: HEAD
+    path: .
+    helm:
+      valueFiles:
+        - production-values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: demo-crm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
