@@ -1,18 +1,19 @@
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mongodb-community-operator
+  name: crm-mongodb
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: 'https://mongodb.github.io/helm-charts'
-    chart: community-operator
-    targetRevision: "0.13.0"
+    repoURL: 'git@gitlab.com:yairdamri48-group/demo-crm-chart.git'
+    targetRevision: HEAD
+    path: manifests/mongodb
+    directory:
+      recurse: true
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: mongodb-operator-system
+    namespace: demo-crm
   syncPolicy:
     automated:
       prune: true
