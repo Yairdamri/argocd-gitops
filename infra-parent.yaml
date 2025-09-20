@@ -1,16 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: infrastructure-parent
+  name: infra-demo-crm
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: 'git@gitlab.com:yairdamri48-group/argocd-project.git'
+    repoURL: git@gitlab.com:yairdamri48-group/argocd-project.git
     targetRevision: HEAD
     path: infra
+    directory:
+      recurse: true
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: https://kubernetes.default.svc
     namespace: argocd
   syncPolicy:
     automated:
@@ -18,3 +22,6 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+  revisionHistoryLimit: 10
