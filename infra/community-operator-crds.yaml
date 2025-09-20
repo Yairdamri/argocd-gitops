@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mongodb-community-operator-crds
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  project: default
+  source:
+    repoURL: "https://mongodb.github.io/helm-charts"
+    chart: community-operator-crds
+    targetRevision: "0.13.0"
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: mongodb-operator-system   # You can choose a namespace for operator-system CRDs
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
