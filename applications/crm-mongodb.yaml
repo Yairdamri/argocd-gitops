@@ -8,9 +8,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'git@gitlab.com:yairdamri48-group/demo-crm-chart.git'
+    repoURL: 'git@gitlab.com:yairdamri48-group/argocd.git'
     targetRevision: HEAD
-    path: .
+    path: db
     helm:
       values: |
         app:
