@@ -16,9 +16,11 @@ spec:
         value: true
       - name: watchNamespaces[0]
         value: "demo-crm"
+      - name: watchNamespace
+        value: "*"
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: mongodb-operator-system
+    namespace: demo-crm
   syncPolicy:
     automated:
       prune: true
