@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: 'git@gitlab.com:yairdamri48-group/demo-crm-chart.git'
     targetRevision: HEAD
-    path: db
+    path: templates
     directory:
       recurse: true
   destination:
