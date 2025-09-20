@@ -11,13 +11,12 @@ spec:
     chart: community-operator
     targetRevision: "0.13.0"
     helm:
-      parameters: 
-      - name: installCRDs
-        value: true
-      - name: watchNamespaces[0]
-        value: "demo-crm"
-      - name: watchNamespace
-        value: "*"
+      values: |
+        installCRDs: true
+        # Make the operator watch the demo-crm namespace and use cluster-wide RBAC
+        watchNamespaces:
+          - demo-crm
+        clusterWide: true
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: demo-crm
