@@ -1,24 +1,7 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: v1
+kind: List
 metadata:
-  name: crm-mongodb
-  namespace: argocd
+  name: crm-mongodb-disabled
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
-spec:
-  project: default
-  source:
-    repoURL: 'git@gitlab.com:yairdamri48-group/demo-crm-chart.git'
-    targetRevision: HEAD
-    path: templates
-    directory:
-      recurse: true
-  destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: demo-crm
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+    note: "Deprecated. MongoDB Community Operator is installed via infra/, and the MongoDBCommunity CR is rendered by the demo-crm Helm chart."
+items: []
