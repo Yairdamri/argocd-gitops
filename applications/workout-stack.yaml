@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@gitlab.com:yair_portfolio/k8s-infra.git
     targetRevision: HEAD
-    path: k8s/charts/workout-stack
+    path: charts/workout-stack
     helm:
       valueFiles:
         - values.yaml
