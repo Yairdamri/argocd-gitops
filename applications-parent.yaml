@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'git@gitlab.com:yairdamri48-group/argocd.git'
+    repoURL: https://gitlab.com/yair_portfolio/workout-gen.git
     targetRevision: HEAD
-    path: applications
+    path: argocd/applications
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
