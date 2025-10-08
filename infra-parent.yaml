@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@gitlab.com:yair_portfolio/argocd-gitops.git
     targetRevision: HEAD
-    path: argocd/infra
+    path: infra
     directory:
       recurse: true
   destination:
