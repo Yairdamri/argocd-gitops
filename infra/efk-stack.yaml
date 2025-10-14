@@ -8,33 +8,21 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
-    chart: efk
-    targetRevision: 2.2.8
+    repoURL: https://helm.elastic.co
+    chart: eck-operator
+    targetRevision: 2.13.0
     helm:
-      releaseName: efk
+      releaseName: elastic-operator
       values: |
-        elasticsearch:
-          master:
-            replicaCount: 1
-            persistence:
-              enabled: true
-              size: 20Gi
-        kibana:
-          ingress:
-            enabled: true
-            ingressClassName: nginx
-            hostname: kibana.example.com
-            tls:
-              - hosts:
-                  - kibana.example.com
-                secretName: kibana-tls
-        fluentd:
-          service:
-            type: ClusterIP
+        installCRDs: true
+        replicaCount: 1
+        managedNamespaces:
+          - logging
+        webhook:
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: logging
+    namespace: elastic-system
   syncPolicy:
     automated:
       prune: true
