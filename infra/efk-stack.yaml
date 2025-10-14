@@ -8,9 +8,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/bitnami/charts.git
-    targetRevision: main
-    path: bitnami/efk
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: efk
+    targetRevision: 2.2.8
     helm:
       releaseName: efk
       values: |
