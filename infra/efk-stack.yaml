@@ -1,4 +1,4 @@
-# infra/efk-stack.yaml  (ONE card for the whole EFK stack)
+# infra/efk-stack.yaml  (ONE card)
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -7,7 +7,7 @@ metadata:
 spec:
   project: default
   sources:
-    # A) ECK Operator (installs all CRDs)
+    # A) ECK Operator (CRDs)
     - repoURL: https://helm.elastic.co
       chart: eck-operator
       targetRevision: 2.13.0
@@ -16,14 +16,14 @@ spec:
           installCRDs: true
       targetNamespace: elastic-system
 
-    # B) Your CRs: Elasticsearch + Kibana (minimal resources)
-    - repoURL: git@gitlab.com:yair_portfolio/argocd-gitops.git       # <-- CHANGE
-      targetRevision: main                                # <-- CHANGE
-      path: manifests/logging
-      # no targetNamespace here because the CR files already specify `namespace: logging`
-
-    # C) Fluent Bit to ship logs into ES
+    # B) Your CRs (Elasticsearch + Kibana) from Git
     - repoURL: git@gitlab.com:yair_portfolio/argocd-gitops.git
+      targetRevision: main
+      path: manifests/logging
+      # (CR files already specify namespace: logging)
+
+    # C) Fluent Bit via the Helm repo  ✅
+    - repoURL: https://fluent.github.io/helm-charts
       chart: fluent-bit
       targetRevision: 0.46.9
       helm:
@@ -74,14 +74,11 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd   # app lives in argocd; resources go to their targetNamespace per source
+    namespace: argocd
 
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    automated: { prune: true, selfHeal: true }
     syncOptions:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
-      # lets ES/Kibana CRs pass dry-run while CRDs are being installed by ECK
       - SkipDryRunOnMissingResource=true
