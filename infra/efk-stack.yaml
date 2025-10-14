@@ -17,13 +17,13 @@ spec:
       targetNamespace: elastic-system
 
     # B) Your CRs: Elasticsearch + Kibana (minimal resources)
-    - repoURL: https://github.com/<you>/<repo>.git        # <-- CHANGE
+    - repoURL: git@gitlab.com:yair_portfolio/argocd-gitops.git       # <-- CHANGE
       targetRevision: main                                # <-- CHANGE
       path: manifests/logging
       # no targetNamespace here because the CR files already specify `namespace: logging`
 
     # C) Fluent Bit to ship logs into ES
-    - repoURL: https://fluent.github.io/helm-charts
+    - repoURL: git@gitlab.com:yair_portfolio/argocd-gitops.git
       chart: fluent-bit
       targetRevision: 0.46.9
       helm:
