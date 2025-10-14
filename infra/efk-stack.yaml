@@ -3,7 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: efk-stack
-  namespace: argocd
+  namespace: logging
 spec:
   project: default
   sources:
@@ -74,8 +74,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
-
+    namespace: logging
   syncPolicy:
     automated: { prune: true, selfHeal: true }
     syncOptions:
