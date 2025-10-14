@@ -1,0 +1,35 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+  namespace: logging
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  version: 8.13.0
+  nodeSets:
+    - name: single
+      count: 1
+      config:
+        node.roles: ["master","data_hot","ingest"]
+        xpack.security.enabled: true
+        node.store.allow_mmap: false
+      podTemplate:
+        spec:
+          containers:
+            - name: elasticsearch
+              env:
+                - name: ES_JAVA_OPTS
+                  value: "-Xms512m -Xmx512m"
+              resources:
+                requests: { cpu: 200m, memory: 1Gi }
+                limits:   { cpu: 500m, memory: 1.5Gi }
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            storageClassName: gp3     # <-- change to your StorageClass
+            resources:
+              requests:
+                storage: 10Gi
