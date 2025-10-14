@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: efk-stack
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bitnami/charts.git
+    targetRevision: main
+    path: bitnami/efk
+    helm:
+      releaseName: efk
+      values: |
+        elasticsearch:
+          master:
+            replicaCount: 1
+            persistence:
+              enabled: true
+              size: 20Gi
+        kibana:
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            hostname: kibana.example.com
+            tls:
+              - hosts:
+                  - kibana.example.com
+                secretName: kibana-tls
+        fluentd:
+          service:
+            type: ClusterIP
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: logging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 3
