@@ -1,26 +1,47 @@
-apiVersion: kibana.k8s.elastic.co/v1
-kind: Kibana
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
   name: kibana
-  namespace: logging
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  namespace: argocd
 spec:
-  version: 8.13.0
-  count: 1
-  elasticsearchRef:
-    name: elasticsearch
-  http:
-    service:
-      spec:
-        type: ClusterIP   # switch to LoadBalancer/Ingress if you need external access
-  podTemplate:
-    spec:
-      containers:
-        - name: kibana
-          env:
-            - name: NODE_OPTIONS
-              value: "--max-old-space-size=200"
-          resources:
-            requests: { cpu: 50m,  memory: 200Mi }
-            limits:   { cpu: 100m, memory: 300Mi }
+  project: default
+  source:
+    repoURL: "https://helm.elastic.co"
+    chart: kibana
+    targetRevision: 7.17.3
+    helm:
+      values: |
+        elasticsearchHosts: "http://elasticsearch-master.logging.svc.cluster.local:9200"
+        protocol: "http"
+
+        extraEnvs:
+          - name: ELASTICSEARCH_USERNAME
+            value: "elastic"
+          - name: ELASTICSEARCH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: logging-secret
+                key: password
+
+        kibanaConfig:
+          kibana.yml: |
+            elasticsearch.username: "elastic"
+            elasticsearch.password: "${ELASTICSEARCH_PASSWORD}"
+
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: logging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

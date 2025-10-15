@@ -1,35 +1,56 @@
-apiVersion: elasticsearch.k8s.elastic.co/v1
-kind: Elasticsearch
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
   name: elasticsearch
-  namespace: logging
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  namespace: argocd
 spec:
-  version: 8.13.0
-  nodeSets:
-    - name: single
-      count: 1
-      config:
-        node.roles: ["master","data_hot","ingest"]
-        xpack.security.enabled: true
-        node.store.allow_mmap: false
-      podTemplate:
-        spec:
-          containers:
-            - name: elasticsearch
-              env:
-                - name: ES_JAVA_OPTS
-                  value: "-Xms300m -Xmx300m"
-              resources:
-                requests: { cpu: 100m, memory: 512Mi }
-                limits:   { cpu: 300m, memory: 768Mi }
-      volumeClaimTemplates:
-        - metadata:
-            name: elasticsearch-data
-          spec:
-            accessModes: ["ReadWriteOnce"]
-            storageClassName: gp3     # <-- change to your StorageClass
-            resources:
-              requests:
-                storage: 5Gi
+  project: default
+  source:
+    repoURL: "https://helm.elastic.co"
+    chart: elasticsearch
+    targetRevision: 7.17.3
+    helm:
+      values: |
+        replicas: 1
+        minimumMasterNodes: 1
+
+        esConfig:
+          elasticsearch.yml: |
+            xpack.security.enabled: true
+            xpack.security.transport.ssl.enabled: false
+
+        secret:
+          enabled: true
+          passwordFromSecret: true
+
+        extraEnvs:
+          - name: ELASTIC_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: logging-secret
+                key: password
+
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+
+        volumeClaimTemplate:
+          storageClassName: gp3
+          accessModes: [ "ReadWriteOnce" ]
+          resources:
+            requests:
+              storage: 10Gi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: logging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

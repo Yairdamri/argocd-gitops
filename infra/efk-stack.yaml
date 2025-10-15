@@ -1,86 +1,20 @@
-# infra/efk-stack.yaml  (ONE card)
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: efk-stack
+  name: logging
   namespace: argocd
 spec:
-  project: default
-  sources:
-    # A) ECK Operator (CRDs)
-    - repoURL: https://helm.elastic.co
-      chart: eck-operator
-      targetRevision: 2.13.0
-      helm:
-        values: |
-          installCRDs: true
-      targetNamespace: elastic-system
-
-    # B) Your CRs (Elasticsearch + Kibana) from Git
-    - repoURL: git@gitlab.com:yair_portfolio/argocd-gitops.git
-      targetRevision: main
-      path: manifests/logging
-      # (CR files already specify namespace: logging)
-
-    # C) Fluent Bit via the Helm repo  ✅
-    - repoURL: https://fluent.github.io/helm-charts
-      chart: fluent-bit
-      targetRevision: 0.46.9
-      helm:
-        values: |
-          resources:
-            requests: { cpu: 50m,  memory: 64Mi }
-            limits:   { cpu: 100m, memory: 128Mi }
-          daemonSetVolumes:
-            - name: varlog
-              hostPath: { path: /var/log }
-            - name: varlibdockercontainers
-              hostPath: { path: /var/lib/docker/containers }
-          daemonSetVolumeMounts:
-            - name: varlog
-              mountPath: /var/log
-            - name: varlibdockercontainers
-              mountPath: /var/lib/docker/containers
-              readOnly: true
-          config:
-            service: |
-              [SERVICE]
-                  Parsers_File parsers.conf
-                  Grace 5
-            inputs: |
-              [INPUT]
-                  Name              tail
-                  Path              /var/log/containers/*.log
-                  Parser            docker
-                  Tag               kube.*
-                  Refresh_Interval  5
-                  Mem_Buf_Limit     20MB
-                  Skip_Long_Lines   On
-            filters: |
-              [FILTER]
-                  Name   kubernetes
-                  Match  kube.*
-                  Kube_Tag_Prefix kube.var.log.containers.
-            outputs: |
-              [OUTPUT]
-                  Name  es
-                  Match *
-                  Host  elasticsearch-es-http.logging.svc
-                  Port  9200
-                  Logstash_Format On
-                  Retry_Limit  False
-                  Suppress_Type_Name On
-                  Buffer_Size 10MB
-                  tls On
-                  tls.verify Off
-      targetNamespace: logging
-
   destination:
-    server: https://kubernetes.default.svc
     namespace: logging
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: "git@gitlab.com:yair_portfolio/argocd-gitops.git"
+    targetRevision: HEAD
+    path: manifests/logging
   syncPolicy:
-    automated: { prune: true, selfHeal: true }
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
-      - CreateNamespace=true
-      - ApplyOutOfSyncOnly=true
-      - SkipDryRunOnMissingResource=true
+        - CreateNamespace=true
