@@ -71,6 +71,8 @@ spec:
                   Retry_Limit  False
                   Suppress_Type_Name On
                   Buffer_Size 10MB
+                  tls On
+                  tls.verify Off
       targetNamespace: logging
 
   destination:
