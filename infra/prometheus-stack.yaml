@@ -18,31 +18,31 @@ spec:
           adminPassword: "123456"
           resources:
             requests:
-              cpu: 50m
-              memory: 128Mi
+              cpu: 30m
+              memory: 64Mi
             limits:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 100m
+              memory: 128Mi
 
         alertmanager:
           alertmanagerSpec:
             replicas: 1
             resources:
               requests:
-                cpu: 50m
-                memory: 128Mi
+                cpu: 30m
+                memory: 64Mi
               limits:
-                cpu: 200m
-                memory: 256Mi
+                cpu: 100m
+                memory: 128Mi
 
         kube-state-metrics:
           resources:
             requests:
-              cpu: 50m
-              memory: 128Mi
+              cpu: 30m
+              memory: 64Mi
             limits:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 100m
+              memory: 128Mi
 
         prometheus-node-exporter:
           resources:
@@ -56,11 +56,11 @@ spec:
         prometheusOperator:
           resources:
             requests:
-              cpu: 50m
-              memory: 128Mi
+              cpu: 30m
+              memory: 64Mi
             limits:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 100m
+              memory: 128Mi
 
         prometheus:
           prometheusSpec:
@@ -73,11 +73,11 @@ spec:
             evaluationInterval: 30s
             resources:
               requests:
-                cpu: 200m
-                memory: 700Mi
+                cpu: 100m
+                memory: 400Mi
               limits:
-                cpu: 600m
-                memory: 1Gi
+                cpu: 300m
+                memory: 600Mi
   syncPolicy:
     automated:
       prune: true
