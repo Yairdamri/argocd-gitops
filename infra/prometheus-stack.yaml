@@ -15,7 +15,7 @@ spec:
     helm:
       values: |
         grafana:
-          adminPassword: "123456"
+          adminPassword: 
           resources:
             requests:
               cpu: 50m
@@ -71,13 +71,13 @@ spec:
             walCompression: true
             scrapeInterval: 30s
             evaluationInterval: 30s
-            resources:
-              requests:
-                cpu: 300m
-                memory: 1Gi
-              limits:
-                cpu: "1"
-                memory: 1.5Gi
+           resources:
+            requests:
+              cpu: 200m
+              memory: 700Mi
+            limits:
+              cpu: 600m
+              memory: 1Gi
   syncPolicy:
     automated:
       prune: true
