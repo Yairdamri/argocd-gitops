@@ -44,9 +44,9 @@ spec:
           inputs: |
             [INPUT]
                 Name tail
-                Path /var/log/containers/*.log
+                Path /var/log/containers/*workout-app*.log
                 multiline.parser docker, cri
-                Tag k8s.*
+                Tag workoutapp.*
                 Mem_Buf_Limit 50MB
                 Skip_Long_Lines On
                 Refresh_Interval 5
@@ -54,15 +54,29 @@ spec:
           filters: |
             [FILTER]
                 Name kubernetes
-                Match k8s.*
+                Match workoutapp.*
                 Merge_Log On
                 Keep_Log Off
                 Buffer_Size False
                 K8S-Logging.Parser On
 
+            [FILTER]
+                Name parser
+                Match workoutapp.*
+                Key_Name log
+                Parser workout_app_json
+                Reserve_Data On
+                Preserve_Key On
+
           customParsers: |
             [PARSER]
-                Name app_json
+                Name workout_app_json
+                Format json
+                Time_Key timestamp
+                Time_Format %Y-%m-%dT%H:%M:%S.%f
+
+            [PARSER]
+                Name workout_app_events
                 Format json
                 Time_Key timestamp
                 Time_Format %Y-%m-%dT%H:%M:%S.%f
@@ -70,8 +84,8 @@ spec:
           outputs: |
             [OUTPUT]
                 Name es
-                Match k8s.*
-                Index app-logs
+                Match workoutapp.*
+                Index workout-app-logs
                 Type  _doc
                 Host elasticsearch-master
                 Port 9200
@@ -80,7 +94,7 @@ spec:
                 tls Off
                 tls.verify Off
                 Logstash_Format On
-                Logstash_Prefix app-logs
+                Logstash_Prefix workout-app
                 Retry_Limit False
                 Suppress_Type_Name On
 
