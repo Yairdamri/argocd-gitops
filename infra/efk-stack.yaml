@@ -71,11 +71,6 @@ spec:
                   Retry_Limit  False
                   Suppress_Type_Name On
                   Buffer_Size 10MB
-                  HTTP_Connect_Timeout 30
-                  HTTP_Request_Timeout 30
-                  Net_Keepalive Off
-                  Net_Keepalive_Idle_Timeout 30
-                  Retry_Interval 10
       targetNamespace: logging
 
   destination:
