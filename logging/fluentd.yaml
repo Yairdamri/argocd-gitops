@@ -30,10 +30,12 @@ spec:
         # DaemonSet configuration to collect logs from all nodes
         kind: DaemonSet
         
-        # Configure Fluentd settings
-        configMapConfigs:
-          - fluentd-prometheus.conf
-          - fluentd-containers.conf
+        # Create custom configurations instead of using configMapConfigs with dots
+        # This avoids the invalid volume name issue
+        configMaps:
+          useDefaults:
+            prometheus: true
+            containers: true
           
         # Configure output to Elasticsearch
         env:
