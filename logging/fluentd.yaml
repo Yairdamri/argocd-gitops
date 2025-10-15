@@ -13,10 +13,15 @@ spec:
     targetRevision: 0.3.9
     helm:
       values: |
-        # Enable the Kubernetes metadata filter
-        podAnnotations:
-          prometheus.io/scrape: "true"
-          prometheus.io/port: "24231"
+        # Disable health checks that are causing restarts
+        livenessProbe:
+          enabled: false
+        readinessProbe:
+          enabled: false
+          
+        # Configure metrics endpoint
+        metrics:
+          serviceMonitor: false
 
         # Configure resources
         resources:
