@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: elasticsearch
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://helm.elastic.co
+    chart: elasticsearch
+    targetRevision: 7.17.3
+    helm:
+      values: |
+        replicas: 1
+        minimumMasterNodes: 1
+        
+        # Configure resource limits and requests
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
+            
+        # Storage configuration
+        volumeClaimTemplate:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+          
+        # Set appropriate JVM heap size
+        esJavaOpts: "-Xmx512m -Xms512m"
+        
+        # For development/testing environments
+        antiAffinity: "soft"
+        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: efk
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

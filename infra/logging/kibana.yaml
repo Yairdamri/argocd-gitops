@@ -1,0 +1,59 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kibana
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://helm.elastic.co
+    chart: kibana
+    targetRevision: 7.17.3
+    helm:
+      values: |
+        # Configure Elasticsearch connection
+        elasticsearchHosts: "http://elasticsearch-master.efk.svc.cluster.local:9200"
+        
+        # Resource requests and limits
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+            
+        # Configure service to access Kibana
+        service:
+          type: ClusterIP
+          port: 5601
+          
+        # Configure ingress for external access
+        ingress:
+          enabled: true
+          className: "nginx"
+          hosts:
+            - host: kibana.local
+              paths:
+                - path: /
+                  pathType: Prefix
+                  
+        # Configure default index pattern and dashboards
+        kibanaConfig:
+          kibana.yml: |
+            server.name: kibana
+            server.host: "0.0.0.0"
+            elasticsearch.hosts: ["http://elasticsearch-master.efk.svc.cluster.local:9200"]
+            monitoring.ui.container.elasticsearch.enabled: true
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: efk
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
