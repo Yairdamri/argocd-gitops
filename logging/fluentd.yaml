@@ -61,6 +61,10 @@ spec:
           - name: varlibdockercontainers
             mountPath: /var/lib/docker/containers
             readOnly: true
+            
+        # Disable PodSecurityPolicy since it's not available in the cluster
+        podSecurityPolicy:
+          enabled: false
 
   destination:
     server: https://kubernetes.default.svc
