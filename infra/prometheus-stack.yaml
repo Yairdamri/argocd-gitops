@@ -15,7 +15,7 @@ spec:
     helm:
       values: |
         grafana:
-          adminPassword: 
+          adminPassword:123456
           resources:
             requests:
               cpu: 50m
