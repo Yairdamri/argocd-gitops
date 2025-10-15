@@ -20,10 +20,10 @@ spec:
             - name: elasticsearch
               env:
                 - name: ES_JAVA_OPTS
-                  value: "-Xms512m -Xmx512m"
+                  value: "-Xms256m -Xmx256m"
               resources:
-                requests: { cpu: 200m, memory: 1Gi }
-                limits:   { cpu: 500m, memory: 1.5Gi }
+                requests: { cpu: 100m, memory: 512Mi }
+                limits:   { cpu: 300m, memory: 768Mi }
       volumeClaimTemplates:
         - metadata:
             name: elasticsearch-data
@@ -32,4 +32,4 @@ spec:
             storageClassName: gp3     # <-- change to your StorageClass
             resources:
               requests:
-                storage: 10Gi
+                storage: 5Gi
