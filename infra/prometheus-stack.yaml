@@ -13,9 +13,12 @@ spec:
     chart: kube-prometheus-stack
     targetRevision: 77.14.0
     helm:
-      values: |
+      values:
         grafana:
-          adminPassword: "123456"
+          admin:
+            existingSecret: grafana-admin
+            userKey: admin-user
+            passwordKey: admin-password
           resources:
             requests:
               cpu: 30m
@@ -61,7 +64,6 @@ spec:
             limits:
               cpu: 100m
               memory: 128Mi
-
         prometheus:
           prometheusSpec:
             # keep Helm selectors compatible
