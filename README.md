@@ -12,7 +12,7 @@ Declarative delivery for the Workout Generator & Tracker stack, using ArgoCD’s
 | Logging & monitoring | `logging/` | Elasticsearch, Fluent Bit, Kibana, Grafana dashboards |
 | Raw manifests | `manifests/` | SealedSecrets and ad-hoc K8s resources referenced by the apps above |
 
-![ArgoCD app topology](../images/Argocd%20Ui.png)  
+![ArgoCD app topology](Argocd_Ui.png)  
 *Parent/child app graph once the repository is registered*
 
 ## Terraform Integration
