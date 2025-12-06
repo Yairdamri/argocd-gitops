@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: git@gitlab.com:yair_portfolio/argocd-gitops.git
+    repoURL: https://github.com/Yairdamri/argocd-gitops.git
     targetRevision: HEAD
     path: applications
   destination:
