@@ -9,7 +9,7 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - workoutgen.ddns.net
+        - workoutgen.myddns.me
       secretName: workout-tls
   rules:
     - host: workoutgen.myddns.me
