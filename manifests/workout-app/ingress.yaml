@@ -12,7 +12,7 @@ spec:
         - workoutgen.ddns.net
       secretName: workout-tls
   rules:
-    - host: workoutgen.ddns.net
+    - host: workoutgen.myddns.me
       http:
         paths:
           - path: /
