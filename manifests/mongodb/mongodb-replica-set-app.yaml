@@ -5,7 +5,7 @@ metadata:
   name: mongodb-replica-set
   namespace: workout
 spec:
-  members: 3
+  members: 2
   type: ReplicaSet
   version: "6.0.5"
   security:
