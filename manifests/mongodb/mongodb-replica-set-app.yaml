@@ -15,7 +15,7 @@ spec:
     - name: workout
       db: admin
       passwordSecretRef:
-        name: mongodb-user-credentials
+        name: mongodb-uri
         key: password
       roles:
         - name: clusterAdmin
