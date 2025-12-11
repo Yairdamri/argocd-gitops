@@ -36,19 +36,19 @@ spec:
             - name: mongod
               resources:
                 requests:
-                  cpu: 50m
-                  memory: 128Mi
+                  cpu: 25m
+                  memory: 96Mi
                 limits:
-                  cpu: 150m
-                  memory: 256Mi
+                  cpu: 75m
+                  memory: 192Mi
             - name: mongodb-agent
               resources:
                 requests:
-                  cpu: 25m
-                  memory: 64Mi
+                  cpu: 15m
+                  memory: 48Mi
                 limits:
-                  cpu: 75m
-                  memory: 128Mi
+                  cpu: 45m
+                  memory: 96Mi
       volumeClaimTemplates:
         - metadata:
             name: data-volume
