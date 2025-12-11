@@ -17,13 +17,14 @@ spec:
         watchNamespaces:
           - workout
         clusterWide: true
-        resources:
-          requests:
-            cpu: 50m
-            memory: 128Mi
-          limits:
-            cpu: 150m
-            memory: 256Mi
+        manager:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 150m
+              memory: 256Mi
   destination:
     server: https://kubernetes.default.svc
     namespace: workout
