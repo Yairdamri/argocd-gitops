@@ -17,7 +17,7 @@ spec:
         watchNamespaces:
           - workout
         clusterWide: true
-        manager:
+        operator:
           resources:
             requests:
               cpu: 50m
