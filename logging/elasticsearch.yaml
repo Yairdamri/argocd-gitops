@@ -20,21 +20,21 @@ spec:
         # Configure resource limits and requests
         resources:
           requests:
-            cpu: "100m"
-            memory: "1Gi"
+            cpu: "50m"
+            memory: "512Mi"
           limits:
-            cpu: "1000m"
-            memory: "2Gi"
+            cpu: "250m"
+            memory: "1Gi"
             
         # Storage configuration
         volumeClaimTemplate:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 10Gi
+              storage: 5Gi
           
         # Set appropriate JVM heap size
-        esJavaOpts: "-Xmx512m -Xms512m"
+        esJavaOpts: "-Xmx256m -Xms256m"
         
         # For development/testing environments
         antiAffinity: "soft"
