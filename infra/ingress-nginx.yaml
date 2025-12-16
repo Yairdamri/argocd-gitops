@@ -13,7 +13,7 @@ spec:
       values: |
         controller:
           service:
-            loadBalancerIP: 34.71.187.141
+            loadBalancerIP: 34.173.153.93
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx

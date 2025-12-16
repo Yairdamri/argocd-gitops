@@ -14,6 +14,8 @@ spec:
         installCRDs: true
         serviceAccount:
           name: external-secrets
+          annotations:
+            iam.gke.io/gcp-service-account: eso-gsm@porfolio-480111.iam.gserviceaccount.com
   destination:
     server: https://kubernetes.default.svc
     namespace: external-secrets
