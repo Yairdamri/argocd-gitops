@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Yairdamri/argocd-gitops.git
+    repoURL: git@github.com:Yairdamri/argocd-gitops.git
     targetRevision: HEAD
     path: logging
     directory:
